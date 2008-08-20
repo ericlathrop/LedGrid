@@ -5,23 +5,29 @@
 
 pattern screen;
 
-void setPattern(const pattern p)
-{
-  memcpy(screen, p, sizeof(pattern));
-}
-
-void setInversePattern(const pattern p)
+void setPattern(const patternp * p)
 {
   for (int r = 0; r < NUM_ROWS; r++)
   {
     for (int c = 0; c < NUM_COLS; c++)
     {
-      screen[r][c] = !p[r][c];
+      screen[r][c] = pgm_read_byte(&((*p)[r][c]));
     }
   }
 }
 
-void scrollPattern(const pattern start, const pattern end, unsigned int milliseconds, unsigned int gap, unsigned int finish)
+void setInversePattern(const patternp * p)
+{
+  for (int r = 0; r < NUM_ROWS; r++)
+  {
+    for (int c = 0; c < NUM_COLS; c++)
+    {
+      screen[r][c] = !pgm_read_byte(&((*p)[r][c]));
+    }
+  }
+}
+
+void scrollPattern(const patternp * start, const patternp * end, unsigned int milliseconds, unsigned int gap, unsigned int finish)
 {
   int stepMilliseconds = milliseconds / NUM_COLS;
 
@@ -38,24 +44,24 @@ void scrollPattern(const pattern start, const pattern end, unsigned int millisec
         int offset = c + frame;
         
         if (offset < NUM_COLS)
-          screen[r][c] = start[r][offset];
+          screen[r][c] = pgm_read_byte(&((*start)[r][offset]));
         else if (offset < NUM_COLS + gap)
           screen[r][c] = 0;
         else
-          screen[r][c] = end[r][offset - NUM_COLS - gap];
+          screen[r][c] =  pgm_read_byte(&((*end)[r][offset - NUM_COLS - gap]));
       }
     }
     delay(stepMilliseconds);
   }
 }
 
-const pattern * getPattern(unsigned char c)
+const patternp * getPattern(unsigned char c)
 {
   switch (c)
   {
     case '!':
       return &PATTERN_EXCLAMATION;
-      
+
     case 'A':
       return &PATTERN_A;
     case 'B':
@@ -66,25 +72,49 @@ const pattern * getPattern(unsigned char c)
       return &PATTERN_D;
     case 'E':
       return &PATTERN_E;
+    case 'F':
+      return &PATTERN_F;
+    case 'G':
+      return &PATTERN_G;
     case 'H':
       return &PATTERN_H;
     case 'I':
       return &PATTERN_I;
+    case 'J':
+      return &PATTERN_J;
+    case 'K':
+      return &PATTERN_K;
     case 'L':
       return &PATTERN_L;
+    case 'M':
+      return &PATTERN_M;
+    case 'N':
+      return &PATTERN_N;
     case 'O':
       return &PATTERN_O;
+    case 'P':
+      return &PATTERN_P;
+    case 'Q':
+      return &PATTERN_Q;
+    case 'R':
+      return &PATTERN_R;
+    case 'S':
+      return &PATTERN_S;
+    case 'T':
+      return &PATTERN_T;
     case 'U':
       return &PATTERN_U;
     case 'V':
       return &PATTERN_V;
+    case 'W':
+      return &PATTERN_W;
     case 'X':
       return &PATTERN_X;
     case 'Y':
       return &PATTERN_Y;
     case 'Z':
       return &PATTERN_Z;
-      
+
     default:
       return &PATTERN_BLANK;
   }
@@ -93,16 +123,16 @@ const pattern * getPattern(unsigned char c)
 void scrollString(const char * s, unsigned int millisecondsPerChar, unsigned int gap)
 {
   int i = 0;
-  const pattern * lastPattern = &PATTERN_BLANK;
+  const patternp * lastPattern = &PATTERN_BLANK;
   
   while (s[i])
   {
     const pattern * currPattern = getPattern(s[i]);
-    scrollPattern(*lastPattern, *currPattern, millisecondsPerChar, gap, 0);
+    scrollPattern(lastPattern, currPattern, millisecondsPerChar, gap, 0);
     
     i++;
     lastPattern = currPattern;
   }
   
-  scrollPattern(*lastPattern, PATTERN_BLANK, millisecondsPerChar, gap, 1);
+  scrollPattern(lastPattern, &PATTERN_BLANK, millisecondsPerChar, gap, 1);
 }

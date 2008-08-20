@@ -5,18 +5,21 @@
 #define NUM_ROWS 7
 #define NUM_COLS 5
 
-typedef unsigned char pattern[NUM_ROWS][NUM_COLS];
+#include <avr/pgmspace.h>
+
+typedef prog_uchar patternp[NUM_ROWS][NUM_COLS]; // stored in progmem
+typedef uint8_t pattern[NUM_ROWS][NUM_COLS];
 
 extern pattern screen;
 
-void setPattern(const pattern p);
-void setInversePattern(const pattern p);
-void scrollPattern(const pattern start, const pattern end, unsigned int milliseconds, unsigned int gap, unsigned int finish);
-const pattern * getPattern(unsigned char c);
+void setPattern(const patternp * p);
+void setInversePattern(const patternp * p);
+void scrollPattern(const patternp * start, const patternp * end, unsigned int milliseconds, unsigned int gap, unsigned int finish);
+const patternp * getPattern(unsigned char c);
 void scrollString(const char * s, unsigned int millisecondsPerChar, unsigned int gap);
 
 
-const pattern PATTERN_BLANK = {
+const patternp PATTERN_BLANK PROGMEM = {
   { 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0 },
   { 0, 0, 0, 0, 0 },
@@ -26,7 +29,17 @@ const pattern PATTERN_BLANK = {
   { 0, 0, 0, 0, 0 },
 };
 
-const pattern PATTERN_DARWINIAN = {
+const patternp PATTERN_SOLID PROGMEM = {
+  { 1, 1, 1, 1, 1 },
+  { 1, 1, 1, 1, 1 },
+  { 1, 1, 1, 1, 1 },
+  { 1, 1, 1, 1, 1 },
+  { 1, 1, 1, 1, 1 },
+  { 1, 1, 1, 1, 1 },
+  { 1, 1, 1, 1, 1 },
+};
+
+const patternp PATTERN_DARWINIAN PROGMEM = {
   { 0, 0, 1, 0, 0 },
   { 1, 1, 1, 1, 1 },
   { 0, 0, 1, 0, 0 },
@@ -36,7 +49,7 @@ const pattern PATTERN_DARWINIAN = {
   { 0, 1, 0, 1, 0 },
 };
 
-const pattern PATTERN_HEART = {
+const patternp PATTERN_HEART PROGMEM = {
   { 0, 0, 0, 0, 0 },
   { 0, 1, 0, 1, 0 },
   { 1, 1, 1, 1, 1 },
@@ -46,7 +59,7 @@ const pattern PATTERN_HEART = {
   { 0, 0, 1, 0, 0 },
 };
 
-const pattern PATTERN_EXCLAMATION = {
+const patternp PATTERN_EXCLAMATION PROGMEM = {
   { 1, 1, 0, 1, 1 },
   { 1, 1, 0, 1, 1 },
   { 1, 1, 0, 1, 1 },
@@ -57,7 +70,7 @@ const pattern PATTERN_EXCLAMATION = {
 };
 
 
-const pattern PATTERN_A = {
+const patternp PATTERN_A PROGMEM = {
   { 0, 0, 1, 0, 0 },
   { 0, 1, 0, 1, 0 },
   { 1, 0, 0, 0, 1 },
@@ -67,7 +80,7 @@ const pattern PATTERN_A = {
   { 1, 0, 0, 0, 1 },
 };
 
-const pattern PATTERN_B = {
+const patternp PATTERN_B PROGMEM = {
   { 1, 1, 1, 1, 0 },
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 1 },
@@ -77,77 +90,188 @@ const pattern PATTERN_B = {
   { 1, 1, 1, 1, 0 },
 };
 
-const pattern PATTERN_C = {
+const patternp PATTERN_C PROGMEM = {
   { 0, 1, 1, 1, 0 },
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 0 },
   { 1, 0, 0, 0, 0 },
   { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 0, 1, 1, 1, 0 },
+};
+
+const patternp PATTERN_D PROGMEM = {
+  { 1, 1, 1, 0, 0 },
+  { 1, 0, 0, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 1, 0 },
+  { 1, 1, 1, 0, 0 },
+};
+
+const patternp PATTERN_E PROGMEM = {
+  { 1, 1, 1, 1, 1 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 1, 1, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 1, 1, 1, 1 }
+};
+
+const patternp PATTERN_F PROGMEM = {
+  { 1, 1, 1, 1, 1 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 1, 1, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+};
+
+const patternp PATTERN_G PROGMEM = {
+  { 0, 1, 1, 1, 1 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 1, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 0, 1, 1, 1, 1 },
+};
+
+
+const patternp PATTERN_H PROGMEM = {
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 1, 1, 1, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 }
+};
+
+const patternp PATTERN_I PROGMEM = {
+  { 1, 1, 1, 1, 1 },
+  { 0, 0, 1, 0, 0 },
+  { 0, 0, 1, 0, 0 },
+  { 0, 0, 1, 0, 0 },
+  { 0, 0, 1, 0, 0 },
+  { 0, 0, 1, 0, 0 },
+  { 1, 1, 1, 1, 1 }
+};
+
+const patternp PATTERN_J PROGMEM = {
+  { 1, 1, 1, 1, 1 },
+  { 0, 0, 0, 1, 0 },
+  { 0, 0, 0, 1, 0 },
+  { 0, 0, 0, 1, 0 },
+  { 0, 0, 0, 1, 0 },
+  { 1, 0, 0, 1, 0 },
+  { 0, 1, 1, 0, 0 },
+};
+
+const patternp PATTERN_K PROGMEM = {
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 1, 0 },
+  { 1, 0, 1, 0, 0 },
+  { 1, 1, 0, 0, 0 },
+  { 1, 0, 1, 0, 0 },
+  { 1, 0, 0, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+};
+
+const patternp PATTERN_L PROGMEM = {
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 1, 1, 1, 1 }
+};
+
+const patternp PATTERN_M PROGMEM = {
+  { 1, 0, 0, 0, 1 },
+  { 1, 1, 0, 1, 1 },
+  { 1, 0, 1, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+};
+
+const patternp PATTERN_N PROGMEM = {
+  { 1, 0, 0, 0, 1 },
+  { 1, 1, 0, 0, 1 },
+  { 1, 0, 1, 0, 1 },
+  { 1, 0, 1, 0, 1 },
+  { 1, 0, 1, 0, 1 },
+  { 1, 0, 0, 1, 1 },
+  { 1, 0, 0, 0, 1 },
+};
+
+const patternp PATTERN_O PROGMEM = {
+  { 0, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 0, 1, 1, 1, 0 }
+};
+
+const patternp PATTERN_P PROGMEM = {
+  { 1, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+  { 1, 0, 0, 0, 0 },
+};
+
+const patternp PATTERN_Q PROGMEM = {
+  { 0, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 0, 1, 1, 1, 0 },
+  { 0, 0, 0, 1, 1 },
+};
+
+const patternp PATTERN_R PROGMEM = {
+  { 1, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+};
+
+const patternp PATTERN_S PROGMEM = {
+  { 0, 1, 1, 1, 0 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 0 },
+  { 0, 1, 1, 1, 0 },
   { 0, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
   { 0, 1, 1, 1, 0 },
 };
 
-const pattern PATTERN_D = {
-  { 1, 1, 1, 0, 0 },
-  { 1, 0, 0, 1, 0 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 1, 0 },
-  { 1, 1, 1, 0, 0 },
-};
-
-const pattern PATTERN_E = {
-  { 1, 1, 1, 1, 1 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 1, 1, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 1, 1, 1, 1 }
-};
-
-const pattern PATTERN_H = {
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 1, 1, 1, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 }
-};
-
-const pattern PATTERN_I = {
+const patternp PATTERN_T PROGMEM = {
   { 1, 1, 1, 1, 1 },
   { 0, 0, 1, 0, 0 },
   { 0, 0, 1, 0, 0 },
   { 0, 0, 1, 0, 0 },
   { 0, 0, 1, 0, 0 },
   { 0, 0, 1, 0, 0 },
-  { 1, 1, 1, 1, 1 }
+  { 0, 0, 1, 0, 0 },
 };
 
-const pattern PATTERN_L = {
-  { 1, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 0, 0, 0, 0 },
-  { 1, 1, 1, 1, 1 }
-};
-
-const pattern PATTERN_O = {
-  { 0, 1, 1, 1, 0 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 1, 0, 0, 0, 1 },
-  { 0, 1, 1, 1, 0 }
-};
-
-const pattern PATTERN_U = {
+const patternp PATTERN_U PROGMEM = {
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 1 },
@@ -157,7 +281,7 @@ const pattern PATTERN_U = {
   { 0, 1, 1, 1, 0 }
 };
 
-const pattern PATTERN_V = {
+const patternp PATTERN_V PROGMEM = {
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 1 },
@@ -167,7 +291,17 @@ const pattern PATTERN_V = {
   { 0, 0, 1, 0, 0 }
 };
 
-const pattern PATTERN_X = {
+const patternp PATTERN_W PROGMEM = {
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 0, 0, 1 },
+  { 1, 0, 1, 0, 1 },
+  { 1, 0, 1, 0, 1 },
+  { 1, 0, 1, 0, 1 },
+  { 0, 1, 0, 1, 0 },
+};
+
+const patternp PATTERN_X PROGMEM = {
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 1 },
   { 0, 1, 0, 1, 0 },
@@ -177,7 +311,7 @@ const pattern PATTERN_X = {
   { 1, 0, 0, 0, 1 }
 };
 
-const pattern PATTERN_Y = {
+const patternp PATTERN_Y PROGMEM = {
   { 1, 0, 0, 0, 1 },
   { 1, 0, 0, 0, 1 },
   { 0, 1, 0, 1, 0 },
@@ -187,7 +321,7 @@ const pattern PATTERN_Y = {
   { 0, 0, 1, 0, 0 }
 };
 
-const pattern PATTERN_Z = {
+const patternp PATTERN_Z PROGMEM = {
   { 1, 1, 1, 1, 1 },
   { 0, 0, 0, 0, 1 },
   { 0, 0, 0, 1, 0 },
@@ -196,6 +330,5 @@ const pattern PATTERN_Z = {
   { 1, 0, 0, 0, 0 },
   { 1, 1, 1, 1, 1 }
 };
-
 
 #endif

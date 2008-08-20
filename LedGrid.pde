@@ -19,8 +19,8 @@ void setup()
     digitalWrite(rows[r], LOW);
   }
 
-  setPattern(PATTERN_BLANK);
-  
+  setPattern(&PATTERN_BLANK);
+
   FrequencyTimer2::disable();
   FrequencyTimer2::setPeriod(2000);
   FrequencyTimer2::setOnOverflow(displayByRows);
@@ -68,7 +68,7 @@ void displayByRows()
 
 void loop()
 {
-  scrollString("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!", 400, 2);  
+  scrollString("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!", 400, 2);
   delay(1000);
 }
 
