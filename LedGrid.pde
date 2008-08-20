@@ -68,7 +68,7 @@ void displayByRows()
 
 void loop()
 {
-  scrollString("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!", 400, 2);
+  scrollString("ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!", 500, 2);
   delay(1000);
 }
 

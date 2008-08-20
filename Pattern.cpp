@@ -115,6 +115,27 @@ const patternp * getPattern(unsigned char c)
     case 'Z':
       return &PATTERN_Z;
 
+    case '1':
+      return &PATTERN_1;
+    case '2':
+      return &PATTERN_2;
+    case '3':
+      return &PATTERN_3;
+    case '4':
+      return &PATTERN_4;
+    case '5':
+      return &PATTERN_5;
+    case '6':
+      return &PATTERN_6;
+    case '7':
+      return &PATTERN_7;
+    case '8':
+      return &PATTERN_8;
+    case '9':
+      return &PATTERN_9;
+    case '0':
+      return &PATTERN_0;
+
     default:
       return &PATTERN_BLANK;
   }
